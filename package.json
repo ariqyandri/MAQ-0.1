@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/ariqyandri/MAQ-0.1#readme",
   "dependencies": {
-    "@shopify/themekit": "^1.1.9"
+    "@shopify/themekit": "^1.1.9",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.54.9"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2"
   }
 }
