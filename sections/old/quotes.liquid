@@ -1,6 +1,6 @@
-<div class="section" style="padding-top:{{ section.settings.padTop }}rem; padding-bottom:{{ section.settings.padBottom }}rem;">
+<div class="page-width" data-section-id="{{ section.id }}" data-section-type="quotes">
   {% if section.settings.title != blank %}
-    <div class="title text-center">
+    <div class="section-header text-center">
       <h2>{{ section.settings.title | escape }}</h2>
     </div>
   {% endif %}
@@ -130,24 +130,6 @@
         "zh-CN": "感言",
         "zh-TW": "推薦文"
       }
-    },
-    {
-      "type": "range",
-      "id": "padTop",
-      "label": "Padding Top",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "default": 3
-    },
-    {
-      "type": "range",
-      "id": "padBottom",
-      "label": "Padding Bottom",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "default": 3
     }
   ],
   "blocks": [

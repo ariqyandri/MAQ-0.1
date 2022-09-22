@@ -196,7 +196,10 @@
   </script>
 
   {{ content_for_header }}
-  {{"global.css" | asset_url | stylesheet_tag}}
+  {{ "normalize.css" | asset_url | stylesheet_tag }}
+  {{ "style.css" | asset_url | stylesheet_tag }}
+  {{ "global.css" | asset_url | stylesheet_tag }}
+  {{ 'jquery-1.11.0.min.js' | asset_url | script_tag }}
 </head>
 
 <body class="template-{{ request.page_type | handle }}">
@@ -235,6 +238,9 @@
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
     <li id="a11y-selection-message">{{ 'general.accessibility.selection_help' | t }}</li>
   </ul>
+
+  <script src='{{ "script.js" | asset_url }}'></script>
+
 </body>
 </html> 
     </head>

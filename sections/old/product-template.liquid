@@ -62,6 +62,73 @@
           {% include 'icon-3d-badge-full-color' %}<span class='product-single__view-in-space-text'>{{ 'products.product.view_in_space' | t }}</span>
         </button>
       {%- endif -%}
+
+
+      {% if product.media.size > 1 %}
+        {% if product.media.size > 4 %}
+          {%- assign enable_thumbnail_slides = true -%}
+        {% endif %}
+
+        <div data-thumbnail-slider>
+          <div class="thumbnails-wrapper{% if enable_thumbnail_slides == true %} slider-active{% endif %}" data-slider>
+            {% if enable_thumbnail_slides == true %}
+              <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__prev thumbnails-slider__prev--{{ section.id }}" data-slider-button>
+                {% include 'icon-chevron-left' %}
+                <span class="icon__fallback-text">{{ 'sections.slideshow.previous_slide' | t }}</span>
+              </button>
+            {% endif %}
+
+            <ul class="product-single__thumbnails product-single__thumbnails-{{ section.id }}" data-slider-container>
+              {% if enable_thumbnail_slides == true %}
+                <div class="product-single__thumbnails-slider-track" data-slider-track>
+              {% endif %}
+
+              {% for media in product.media %}
+                <li class="product-single__thumbnails-item product-single__thumbnails-item--{{ section.settings.media_size }} {% if enable_thumbnail_slides == true %} product-single__thumbnails-item-slide{% endif %} js"{% if enable_thumbnail_slides == true %} data-slider-slide-index="{{ forloop.index0 }}" data-slider-item{% endif %}>
+                  <a href="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                    data-thumbnail-id="{{ section.id }}-{{ media.id }}"
+                    {% if enable_thumbnail_slides == true %} data-slider-item-link{% endif %}
+                    {% if enable_image_zoom %}data-zoom="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+
+                      {%- capture thumbnailAlt -%}
+                        {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+                          {{ 'sections.featured_product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                        {%- elsif media.media_type == 'model' -%}
+                          {{ 'sections.featured_product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                        {%- else -%}
+                          {{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+                        {%- endif -%}
+                      {%- endcapture -%}
+
+                      <img class="product-single__thumbnail-image" src="{{ media.preview_image | img_url: '110x110', scale: 2 }}" alt="{{ thumbnailAlt }}">
+                      {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
+                        <div class="product-single__thumbnail-badge">
+                          {% include 'icon-video-badge-full-color' %}
+                        </div>
+                      {%- endif -%}
+                      {%- if media.media_type == 'model' -%}
+                        <div class="product-single__thumbnail-badge">
+                          {% include 'icon-3d-badge-full-color' %}
+                        </div>
+                      {%- endif -%}
+                  </a>
+                </li>
+              {% endfor %}
+
+              {% if enable_thumbnail_slides == true %}
+                </div>
+              {% endif %}
+            </ul>
+            {% if enable_thumbnail_slides == true %}
+              <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__next thumbnails-slider__next--{{ section.id }}" data-slider-button data-slider-button-next>
+                {% include 'icon-chevron-right' %}
+                <span class="icon__fallback-text">{{ 'sections.slideshow.next_slide' | t }}</span>
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
     </div>
 
     <div class="grid__item {{ product_description_width }}">
@@ -73,6 +140,17 @@
           <div class="product__price">
             {% include 'product-price', variant: current_variant, show_vendor: section.settings.show_vendor %}
           </div>
+
+          {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+            <div class="product__policies rte" data-product-policies>
+              {%- if cart.taxes_included -%}
+                {{ 'products.product.include_taxes' | t }}
+              {%- endif -%}
+              {%- if shop.shipping_policy.body != blank -%}
+                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
 
           {% capture "form_classes" -%}
             product-form product-form-{{ section.id }}
@@ -195,7 +273,10 @@
           {{ product.description }}
         </div>
 
-      </div>
+        {% if section.settings.show_share_buttons %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product.featured_media %}
+        {% endif %}
+    </div>
   </div>
 </div>
 
